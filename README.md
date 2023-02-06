@@ -2,7 +2,7 @@
 An upgraded teleporter mod for Spaceflight Simulator.
 
 # Features
-- New menu to place your rocket in orbit around any body. Press the backqoute key to open it.
+- New menu to place your rocket in orbit around any body. Press the backqoute (`) key to open it.
 
 This mod supports custom solar systems.
 
