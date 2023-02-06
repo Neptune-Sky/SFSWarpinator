@@ -6,6 +6,7 @@ using static SFS.UI.MenuGenerator;
 using static SFS.UI.ButtonBuilder;
 using SFS.WorldBase;
 using SFS;
+using SFS.Audio;
 using SFS.World;
 using SFS.World.Maps;
 using UnityEngine;
@@ -64,6 +65,12 @@ namespace Warpinator
 
         public static void Open()
         {
+            if (PlayerController.main.player.Value == null)
+            {
+                SoundPlayer.main.denySound.Play();
+                MsgDrawer.main.Log("You aren't controlling a rocket!");
+                return;
+            }
             List<Planet> planets2 = new List<Planet>();
             planets2.AddRange(Base.planetLoader.planets.Values);
 
