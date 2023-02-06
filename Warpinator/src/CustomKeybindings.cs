@@ -1,5 +1,4 @@
-﻿using System;
-using ModLoader;
+﻿using ModLoader;
 using ModLoader.Helpers;
 using UnityEngine;
 using static SFS.Input.KeybindingsPC;
@@ -8,35 +7,33 @@ namespace Warpinator
 {
     public class DefaultKeys
     {
-        public Key openMenu = KeyCode.BackQuote;
+        public readonly Key openMenu = KeyCode.BackQuote;
     }
-    public class Warp_Keybindings : ModKeybindings
+
+    public class WarpKeybindings : ModKeybindings
     {
-        static readonly DefaultKeys defaultKeys = new DefaultKeys();
+        static readonly DefaultKeys DefaultKeys = new();
 
         #region Keys
 
-        public Key openMenu = defaultKeys.openMenu;
+        public Key openMenu = DefaultKeys.openMenu;
 
         #endregion
 
-        public static Warp_Keybindings main;
+        private static WarpKeybindings main;
 
         public static void LoadKeybindings()
         {
-            main = SetupKeybindings<Warp_Keybindings>(Main.main);
-
+            main = SetupKeybindings<WarpKeybindings>(Main.main);
             SceneHelper.OnWorldSceneLoaded += OnWorldLoad;
         }
 
-        static void OnWorldLoad()
-        {
-            AddOnKeyDown_World(main.openMenu, Menu.Open);
-        }
+        static void OnWorldLoad() => AddOnKeyDown_World(main.openMenu, Menu.Open);
 
         public override void CreateUI()
         {
             CreateUI_Text("Warpinator Keybindings");
+            CreateUI_Keybinding(openMenu, DefaultKeys.openMenu, "Open Menu");
         }
     }
 }

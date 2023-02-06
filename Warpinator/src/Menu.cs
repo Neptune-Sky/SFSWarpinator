@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using HarmonyLib;
 using SFS.UI;
 using static SFS.UI.MenuGenerator;
 using static SFS.UI.ButtonBuilder;
 using SFS.WorldBase;
 using SFS;
 using SFS.World;
+using SFS.World.Maps;
+using UnityEngine;
 
 namespace Warpinator
 {
@@ -36,12 +39,17 @@ namespace Warpinator
 
                 ButtonBuilder button = CreateButton(null, () => planet.DisplayName, () =>
                 {
-                    MsgDrawer.main.Log(planet.DisplayName);
-                    Rocket rocket = PlayerController.main.player.Value as Rocket;
-                    var parameters = GetOrbitParameters(planet);
-                    rocket.location.position.Value = new Double2(planet.GetLocation(WorldTime.main.worldTime).position.x, planet.GetLocation(WorldTime.main.worldTime).position.y + parameters.x);
-                    rocket.location.planet.Value = planet;
-
+                    MsgDrawer.main.Log("Teleporting to " + planet.DisplayName);
+                    var indexOf = GameManager.main.rockets.IndexOf(PlayerController.main.player.Value as Rocket);
+                    PlayerController.main.player.Value = null;
+                    Double2 parameters = GetOrbitParameters(planet);
+                    Debug.Log(parameters);
+                    Location nullLocation = new Location(0, planet, new Double2(0, 0), new Double2(0, 0));
+                    Location location = new Location(0, planet, new Double2(0, planet.Radius + parameters.x), new Double2(parameters.y, 0));
+                    GameManager.main.rockets[indexOf].physics.SetLocationAndState(nullLocation, false);
+                    GameManager.main.rockets[indexOf].physics.SetLocationAndState(location, false);
+                    PlayerController.main.player.Value = GameManager.main.rockets[indexOf];
+                    Map.view.ToggleFocus(GameManager.main.rockets[indexOf].mapPlayer);
                 }, SFS.Input.CloseMode.Current);
 
                 horizontalElements.Add(button);
@@ -66,11 +74,11 @@ namespace Warpinator
 
         static Double2 GetOrbitParameters(Planet planet)
         {
-            double distance = planet.HasAtmospherePhysics ? planet.AtmosphereHeightPhysics * 1.05 : planet.TimewarpRadius_Descend * 1.05;
+            double distance = planet.HasAtmospherePhysics
+                ? planet.AtmosphereHeightPhysics * 1.1
+                : planet.TimewarpRadius_Descend * 1.1 - planet.Radius;
 
-            double G = 6.6743 * Math.Pow(10, -11);
-
-            double velocity = Math.Sqrt(G * planet.mass / distance);
+            double velocity = Math.Sqrt(planet.mass / (distance + planet.Radius));
 
             return new Double2(distance, velocity);
         }

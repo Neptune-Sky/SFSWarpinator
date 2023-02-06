@@ -1,5 +1,4 @@
-﻿using System;
-namespace Warpinator
+﻿namespace Warpinator
 {
     public class MoveRocket
     {
