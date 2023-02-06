@@ -13,7 +13,7 @@ namespace Warpinator
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.9.8";
-        public override string ModVersion => "v0.1.0-beta";
+        public override string ModVersion => "v0.1.0-alpha";
         public override string Description => "A simple teleport menu for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new Dictionary<string, FilePath>
         {
