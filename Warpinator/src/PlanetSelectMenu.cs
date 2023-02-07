@@ -17,7 +17,7 @@ using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator
 {
-    public static class Menu
+    public static class PlanetSelectMenu
     {
         static List<MenuElement> menuElements = new();
         static List<Planet> planets = new();
@@ -59,8 +59,7 @@ namespace Warpinator
                     }
                     var button = Builder.CreateButton(horizontal, 250, 50, 0, 0, () =>
                     {
-                        MoveRocket.Teleport(planet);
-                        ScreenManager.main.CloseCurrent();
+                        TeleportMenu.Open(planet);
                     }, planet.name);
                 }
 

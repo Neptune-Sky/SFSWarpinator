@@ -28,7 +28,7 @@ namespace Warpinator
             SceneHelper.OnWorldSceneLoaded += OnWorldLoad;
         }
 
-        static void OnWorldLoad() => AddOnKeyDown_World(main.openMenu, Menu.Open);
+        static void OnWorldLoad() => AddOnKeyDown_World(main.openMenu, PlanetSelectMenu.Open);
 
         public override void CreateUI()
         {

@@ -461,10 +461,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\CustomUI.cs" />
     <Compile Include="src\Main.cs" />
     <Compile Include="src\CustomKeybindings.cs" />
     <Compile Include="src\MoveRocket.cs" />
-    <Compile Include="src\Menu.cs" />
+    <Compile Include="src\TeleportMenu.cs" />
+    <Compile Include="src\PlanetSelectMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
