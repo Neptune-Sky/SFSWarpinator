@@ -1,54 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using SFS.UI;
 using static SFS.UI.MenuGenerator;
 using static SFS.UI.ButtonBuilder;
 using SFS.WorldBase;
 using SFS;
 using SFS.Audio;
+using SFS.Input;
+using SFS.UI.ModGUI;
 using SFS.World;
 using SFS.World.Maps;
+using UnityEngine;
+using Button = SFS.UI.Button;
+using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator
 {
     public static class Menu
     {
-        static List<MenuElement> menuElements = new List<MenuElement>();
-        static List<Planet> planets = new List<Planet>();
+        static List<MenuElement> menuElements = new();
+        static List<Planet> planets = new();
 
         static void Create()
         {
             menuElements.Clear();
-            TextBuilder title = TextBuilder.CreateText();
-            title.Text(() => "Warpinator");
-            menuElements.Add(title);
-            menuElements.Add(ElementGenerator.VerticalSpace(20));
-
             planets.Clear();
             planets.AddRange(Base.planetLoader.planets.Values);
-
-            List<MenuElement> horizontalElements = new List<MenuElement>();
-            int columns = (int)Math.Ceiling((double)(planets.Count / 12));
-            if (columns == 0) columns++;
-
-            for (int i = 0; i < planets.Count; i++)
+            int columns = Math.Clamp((int)Math.Ceiling((double)(planets.Count / 12)), 2, 4);
+            int rows = Math.Clamp((int)Math.Ceiling((double)planets.Count / columns), 1, 13);
+            
+            var output = new MenuElement(delegate(GameObject root)
             {
+                var containerObject = new GameObject("ModGUI Container");
+                var rectTransform = containerObject.AddComponent<RectTransform>();
+                rectTransform.sizeDelta = new Vector2(0, 0);
+                
+                var scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 275 * columns, 50 + 58 * rows, 0, 0, false, false, 1, "Warpinator");
 
-                Planet planet = planets[i];
+                float scale = 0.75f;
 
-                ButtonBuilder button = CreateButton(null, () => planet.DisplayName, () =>
+                scroll.Position = new Vector2(0, scroll.Size.y * scale / 2);
+                var layout = scroll.CreateLayoutGroup(Type.Vertical);
+                layout.spacing = 7;
+                layout.childAlignment = TextAnchor.MiddleCenter;
+                scroll.EnableScrolling(Type.Vertical);
+
+                Container horizontal = Builder.CreateContainer(scroll);
+                horizontal.CreateLayoutGroup(Type.Horizontal);
+                for (int i = 0; i < planets.Count; i++)
                 {
-                    MoveRocket.Teleport(planet);
-                }, SFS.Input.CloseMode.Current);
+                    Planet planet = planets[i];
 
-                horizontalElements.Add(button);
-
-                if ((horizontalElements.Count % columns == 0 && horizontalElements.Count > 0) || i == planets.Count - 1)
-                {
-                    menuElements.Add(ElementGenerator.DefaultHorizontalGroup(horizontalElements.ToArray()));
-                    horizontalElements.Clear();
+                    if (i % columns == 0 && i != 0)
+                    {
+                        horizontal = Builder.CreateContainer(scroll);
+                        horizontal.CreateLayoutGroup(Type.Horizontal);
+                    }
+                    var button = Builder.CreateButton(horizontal, 250, 50, 0, 0, () =>
+                    {
+                        MoveRocket.Teleport(planet);
+                        ScreenManager.main.CloseCurrent();
+                    }, planet.name);
                 }
-            }
+
+                scroll.gameObject.transform.localScale = new Vector3(scale, scale);
+                containerObject.transform.SetParent(root.transform);
+            });
+            
+            menuElements.Add(output);
         }
 
         public static void Open()
@@ -63,7 +83,7 @@ namespace Warpinator
             planets2.AddRange(Base.planetLoader.planets.Values);
 
             if (planets2 != planets) Create();
-
+            
             OpenMenu(CancelButton.Cancel, SFS.Input.CloseMode.Current, menuElements.ToArray());
         }
     }
