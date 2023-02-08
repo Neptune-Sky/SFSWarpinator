@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mime;
 using SFS.UI;
 using static SFS.UI.MenuGenerator;
-using static SFS.UI.ButtonBuilder;
 using SFS.WorldBase;
 using SFS;
 using SFS.Audio;
-using SFS.Input;
 using SFS.UI.ModGUI;
 using SFS.World;
-using SFS.World.Maps;
 using UnityEngine;
-using Button = SFS.UI.Button;
 using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator

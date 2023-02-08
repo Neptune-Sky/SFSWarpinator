@@ -43,7 +43,7 @@ namespace Warpinator
                     MsgDrawer.main.Log("Cannot teleport below planet surface");
                     break;
                 case InvalidType.InsideAtmosphere:
-                    MenuGenerator.OpenConfirmation(CloseMode.Current, () => "The value you set is inside this planet's atmosphere.\nIf you confirm, your rocket may be destroyed if you do not have cheats enabled.\n\nAre you sure?", () => "Yes", () =>
+                    MenuGenerator.OpenConfirmation(CloseMode.Current, () => "The height you set is within this planet's atmosphere, and may destroy your rocket from heating.\n\nAre you sure?", () => "Yes", () =>
                     {
                         ExecutePerfectOrbit(planet, distance);
                         WorldTime.main.StopTimewarp(false);
@@ -73,7 +73,7 @@ namespace Warpinator
             WorldTime.main.StopTimewarp(false);
         }
 
-        private static Double2 GetOrbitParameters(Planet planet, double distance)
+        public static Double2 GetOrbitParameters(Planet planet, double distance)
         {
             distance += planet.Radius;
 

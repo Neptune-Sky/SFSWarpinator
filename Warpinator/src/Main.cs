@@ -15,7 +15,7 @@ namespace Warpinator
         public override string MinimumGameVersionNecessary => "1.5.9.8";
         public override string ModVersion => "v0.3.0-alpha";
         public override string Description => "A simple teleport menu for rockets.";
-        public Dictionary<string, FilePath> UpdatableFiles => new Dictionary<string, FilePath>
+        public Dictionary<string, FilePath> UpdatableFiles => new()
         {
             {
                 "https://github.com/Neptune-Sky/SFSWarpinator/releases/latest/download/Warpinator.dll",

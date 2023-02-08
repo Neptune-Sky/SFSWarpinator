@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using SFS.UI.ModGUI;
 using UnityEngine;
@@ -59,10 +60,15 @@ namespace Warpinator
 
             if (numCheck == 0)
                 data.currentVal = data.defaultVal;
-            else if (numCheck < data.min || numCheck > data.max)
+            else if (numCheck < data.min)
             {
-                data.currentVal = data.defaultVal;
-                data.textInput.Text = data.defaultVal.ToString(CultureInfo.InvariantCulture);
+                data.currentVal = Math.Floor(data.min);
+                data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (numCheck > data.max)
+            {
+                data.currentVal = Math.Floor(data.max);
+                data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
             }
             else
                 data.currentVal = numCheck.Round(0.0001);
