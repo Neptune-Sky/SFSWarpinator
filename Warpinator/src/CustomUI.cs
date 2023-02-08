@@ -16,7 +16,7 @@ namespace Warpinator
         public double max;
         public int charLimit;
     }
-    public class CustomUI
+    public static class CustomUI
     {
         public static NumberInput CreateNumberInput(Transform parent, int width, int height,
             double defaultVal, double min, double max, int charLimit = 100, UnityAction<string> onChange = null, int posX = 0,

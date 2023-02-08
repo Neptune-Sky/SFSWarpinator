@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using ModLoader;
 using HarmonyLib;
+using JetBrains.Annotations;
 using SFS.IO;
 using UITools;
 
 namespace Warpinator
 {
+    [UsedImplicitly]
     public class Main : Mod, IUpdatable
     {
         public override string ModNameID => "Warpinator";
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.9.8";
-        public override string ModVersion => "v0.3.0-alpha";
+        public override string ModVersion => "v0.4.0-alpha";
         public override string Description => "A simple teleport menu for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
@@ -41,7 +43,7 @@ namespace Warpinator
             main = this;
     
             // The patcher uses an ID formatted like a web domain.
-            patcher = new("Neptune.Warpinator.Mod");
+            patcher = new Harmony("Neptune.Warpinator.Mod");
     
             // This pulls your Harmony patches from everywhere in the namespace and applies them.
             patcher.PatchAll();
