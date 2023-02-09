@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ModLoader;
 using HarmonyLib;
 using JetBrains.Annotations;
+using ModLoader.Helpers;
 using SFS.IO;
 using UITools;
 
@@ -15,8 +16,8 @@ namespace Warpinator
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.9.8";
-        public override string ModVersion => "v0.4.0-alpha";
-        public override string Description => "A simple teleport menu for rockets.";
+        public override string ModVersion => "v0.5.0-alpha";
+        public override string Description => "A teleporter for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
             {
@@ -34,6 +35,7 @@ namespace Warpinator
         public override void Load()
         {
             // This tells the loader what to run when your mod is loaded.
+            SceneHelper.OnWorldSceneLoaded += TeleportButton.Create;
         }
     
         public override void Early_Load()

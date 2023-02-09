@@ -54,7 +54,7 @@ namespace Warpinator
                     }
                     var button = Builder.CreateButton(horizontal, 250, 50, 0, 0, () =>
                     {
-                        TeleportMenu.Open(planet);
+                        PlanetTeleportMenu.Open(planet);
                     }, planet.name);
                 }
 

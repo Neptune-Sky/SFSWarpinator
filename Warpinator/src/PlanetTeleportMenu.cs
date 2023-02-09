@@ -10,7 +10,7 @@ using static SFS.UI.ModGUI.Builder;
 
 namespace Warpinator
 {
-    static class TeleportMenu
+    static class PlanetTeleportMenu
     {
         static double DefaultHeight(Planet planet)
         {
@@ -84,7 +84,7 @@ namespace Warpinator
             parameters.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleLeft, 10);
             
             Container parametersContainer = CreateContainer(parameters);
-            parametersContainer.CreateLayoutGroup(Type.Horizontal, TextAnchor.UpperCenter, 10);
+            parametersContainer.CreateLayoutGroup(Type.Horizontal, TextAnchor.MiddleCenter, 10);
             
             CreateLabel(parametersContainer, 200, 35, text: "Orbit Height:");
             var input = CustomUI.CreateNumberInput(parametersContainer, 200, 45, DefaultHeight(planet), 0, (planet.SOI - planet.Radius) * 0.999);
@@ -92,7 +92,7 @@ namespace Warpinator
             Box statBox = CreateBox(ToReturn, 450, 180);
             statBox.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleLeft, 10);
             
-            CreateLabel(statBox, 450, 45, text: "Projected Orbit");
+            CreateLabel(statBox, 450, 35, text: "Projected Orbit");
             
             Container stats = CreateContainer(statBox);
             stats.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 10, new RectOffset(10, 0, 0, 0));
