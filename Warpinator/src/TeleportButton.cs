@@ -27,23 +27,27 @@ namespace Warpinator
                     teleport.Show = false;
                     return;
                 }
-                if (selected is MapPlayer mapPlayer && mapPlayer.Player.isPlayer)
+                switch (selected)
                 {
-                    teleport.Show = false;
-                    return;
+                    case MapRocket mapRocket when mapRocket.Player.isPlayer:
+                    case not MapPlanet or MapRocket:
+                        teleport.Show = false;
+                        return;
+                    default:
+                        teleport.Show = true;
+                        break;
                 }
-
-                teleport.Show = true;
             };
             teleport.button.onClick += () =>
             {
-                if (GameSelector.main.selected.Value is MapPlanet mapPlanet)
+                switch (GameSelector.main.selected.Value)
                 {
-                    PlanetTeleportMenu.Open(mapPlanet.planet);
-                }
-                if (GameSelector.main.selected.Value is MapPlayer mapPlayer)
-                {
-                    MoveRocket.ToRocket(mapPlayer.Player as Rocket);
+                    case MapPlanet mapPlanet:
+                        PlanetTeleportMenu.Open(mapPlanet.planet);
+                        break;
+                    case MapRocket mapRocket:
+                        MoveRocket.ToRocket(mapRocket.rocket);
+                        break;
                 }
             };
 
