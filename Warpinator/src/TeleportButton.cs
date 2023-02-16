@@ -29,12 +29,12 @@ namespace Warpinator
                 }
                 switch (selected)
                 {
-                    case MapRocket mapRocket when mapRocket.Player.isPlayer:
-                    case not MapPlanet or MapRocket:
-                        teleport.Show = false;
-                        return;
-                    default:
+                    case MapRocket mapRocket when !mapRocket.Player.isPlayer:
+                    case MapPlanet:
                         teleport.Show = true;
+                        break;
+                    default:
+                        teleport.Show = false;
                         break;
                 }
             };
