@@ -39,9 +39,8 @@ namespace Warpinator
                     ExecutePerfectOrbit(planet, distance);
                     break;
                 case InvalidType.BelowTerrain:
-                    ScreenManager.main.CloseStack();
                     SoundPlayer.main.denySound.Play();
-                    MsgDrawer.main.Log("Cannot teleport below planet surface");
+                    MenuGenerator.ShowChoices(() => "Cannot teleport below planet's surface.", ButtonBuilder.CreateButton(null, () => "Okay", null, CloseMode.Current));
                     break;
                 case InvalidType.InsideAtmosphere:
                     MenuGenerator.OpenConfirmation(CloseMode.Current, () => "The height you set is within this planet's atmosphere, and may destroy your rocket from heating.\n\nAre you sure?", () => "Yes", () =>
