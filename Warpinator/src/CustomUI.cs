@@ -3,6 +3,7 @@ using System.Globalization;
 using SFS.UI.ModGUI;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Text.RegularExpressions;
 
 namespace Warpinator
 {
@@ -37,33 +38,54 @@ namespace Warpinator
         }
         static void Numberify(NumberInput data)
         {
+            double numCheck;
             try
             {
-                double.Parse(data.textInput.Text, CultureInfo.InvariantCulture);
+                numCheck = double.Parse(data.textInput.Text, CultureInfo.InvariantCulture);
             }
             catch
             {
-                if (data.textInput.Text is "." or "")
+                if (data.min >= 0)
+                {
+                    switch (data.textInput.Text)
+                    {
+                        case "." or "":
+                            data.currentVal = 0;
+                            return;
+                        case "-":
+                            data.textInput.Text = "";
+                            data.oldText = "";
+                            return;
+                    }
+                }
+                else if (Regex.IsMatch(data.textInput.Text, "^-?\\.?$"))
+                {
+                    data.currentVal = 0;
                     return;
+                }
 
                 data.textInput.Text = data.oldText;
                 return;
             }
-
-
             if (data.textInput.Text.Length > data.charLimit)
             {
                 data.textInput.Text = data.oldText;
             }
 
-            double numCheck = double.Parse(data.textInput.Text, CultureInfo.InvariantCulture);
+            if (Regex.IsMatch(data.textInput.Text, "^-?0+[1-9]"))
+            {
+                Regex regex = new("0+");
+                data.textInput.Text = regex.Replace(data.textInput.Text, "", 1);
+            }
 
-            if (numCheck == 0)
-                data.currentVal = data.defaultVal;
-            else if (numCheck < data.min)
+            if (numCheck < data.min)
             {
                 data.currentVal = Math.Floor(data.min);
-                data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
+                if (data.min <= 0)
+                {
+                    data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
+                }
+                
             }
             else if (numCheck > data.max)
             {
@@ -71,7 +93,7 @@ namespace Warpinator
                 data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
             }
             else
-                data.currentVal = numCheck.Round(0.0001);
+                data.currentVal = numCheck.Round(0.000001);
 
             data.oldText = data.textInput.Text;
         }

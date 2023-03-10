@@ -461,6 +461,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Config.cs" />
     <Compile Include="src\SearchHandler.cs" />
     <Compile Include="src\TeleportButton.cs" />
     <Compile Include="src\CustomUI.cs" />
@@ -469,9 +470,6 @@
     <Compile Include="src\MoveRocket.cs" />
     <Compile Include="src\PlanetTeleportMenu.cs" />
     <Compile Include="src\PlanetSelectMenu.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

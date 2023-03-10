@@ -42,7 +42,7 @@ namespace Warpinator
         {
             input = input.ToLowerInvariant();
             List<Planet> matches = new();
-            if (input == string.Empty) return matches;
+            if (string.IsNullOrWhiteSpace(input)) return matches;
 
             foreach (Planet planet in PlanetSelectMenu.planets)
             {

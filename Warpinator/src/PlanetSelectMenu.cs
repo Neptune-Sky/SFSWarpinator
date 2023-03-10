@@ -49,26 +49,7 @@ namespace Warpinator
                 scroll.EnableScrolling(Type.Vertical);
 
                 CreatePlanetButtons(planets, scroll);
-                /*
-                Container horizontal = Builder.CreateContainer(scroll);
-                horizontal.CreateLayoutGroup(Type.Horizontal);
-                for (int i = 0; i < planets.Count; i++)
-                {
-                    Planet planet = planets[i];
-
-                    if (i % columns == 0 && i != 0)
-                    {
-                        horizontal = Builder.CreateContainer(scroll);
-                        horizontal.CreateLayoutGroup(Type.Horizontal);
-                    }
-                    var button = Builder.CreateButton(horizontal, 250, 50, 0, 0, () =>
-                    {
-                        PlanetTeleportMenu.Open(planet);
-                    }, planet.name);
-                    button.gameObject.GetComponentInChildren<TextAdapter>().gameObject.transform.localScale =
-                        new Vector3(buttonTextScale, buttonTextScale);
-                }
-                */
+                
                 scroll.gameObject.transform.localScale = new Vector3(windowScale, windowScale);
                 containerObject.transform.SetParent(root.transform);
             });

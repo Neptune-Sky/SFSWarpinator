@@ -21,7 +21,7 @@ namespace Warpinator
         static InvalidType OrbitCheck(Planet planet, double distance)
         {
             double rocketHeight = ((Rocket)PlayerController.main.player.Value).GetSizeRadius();
-            if (distance < planet.maxTerrainHeight + rocketHeight)
+            if (distance < planet.maxTerrainHeight + rocketHeight && planet.data.terrain.collider)
             {
                 return InvalidType.BelowTerrain;
             }
@@ -31,12 +31,12 @@ namespace Warpinator
             }
             return InvalidType.None;
         }
-        public static void PerfectOrbit(Planet planet, double distance)
+        public static void PerfectOrbit(Planet planet, double distance, bool counterclockwise = false)
         {
             switch (OrbitCheck(planet, distance))
             {
                 case InvalidType.None:
-                    ExecutePerfectOrbit(planet, distance);
+                    ExecutePerfectOrbit(planet, distance, counterclockwise);
                     break;
                 case InvalidType.BelowTerrain:
                     SoundPlayer.main.denySound.Play();
@@ -45,7 +45,7 @@ namespace Warpinator
                 case InvalidType.InsideAtmosphere:
                     MenuGenerator.OpenConfirmation(CloseMode.Current, () => "The height you set is within this planet's atmosphere, and may destroy your rocket from heating.\n\nAre you sure?", () => "Yes", () =>
                     {
-                        ExecutePerfectOrbit(planet, distance);
+                        ExecutePerfectOrbit(planet, distance, counterclockwise);
                         WorldTime.main.StopTimewarp(false);
                     }, () => "No");
                     break;
@@ -54,11 +54,12 @@ namespace Warpinator
             }
         }
 
-        static void ExecutePerfectOrbit(Planet planet, double distance)
+        static void ExecutePerfectOrbit(Planet planet, double distance, bool counterclockwise = false)
         {
             MsgDrawer.main.Log("Teleporting to " + planet.DisplayName);
             Double2 parameters = GetOrbitParameters(planet, distance);
-            Location location = new Location(0, planet, new Double2(0, parameters.x), new Double2(parameters.y, 0));
+            double velocity = counterclockwise ? -parameters.y : parameters.y;
+            Location location = new Location(0, planet, new Double2(0, parameters.x), new Double2(velocity, 0));
             
             Execute(location);
             
@@ -89,6 +90,26 @@ namespace Warpinator
             
             Map.manager.mapMode.Value = false;
             Map.view.SetViewSmooth(new MapView.View(PlayerController.main.player.Value.mapPlayer, Double2.zero, rocket.GetSizeRadius() + 100));
+        }
+
+        public static void PlanetSurface(Planet planet, double degrees)
+        {
+            double angle = degrees * Mathf.Deg2Rad;
+            MsgDrawer.main.Log("Teleporting to " + planet.DisplayName);
+            var position = new Double2(
+                0,
+                planet.GetTerrainHeightAtAngle(angle + 90 * Mathf.Deg2Rad) + planet.Radius + PlayerController.main.player.Value.GetSizeRadius() / 2 + 3
+                ).Rotate(angle);
+
+            Location location = new Location(0, planet, position, new Double2(0, 0));
+            Execute(location);
+            
+            Rocket rocket = PlayerController.main.player.Value as Rocket;
+            if (rocket == null) return;
+            rocket.EnableCollisionImmunity(6);
+            rocket.partHolder.transform.eulerAngles = new Vector3(0, 0, (float)location.position.AngleDegrees - 90);
+            
+            Map.view.SetViewSmooth(new MapView.View(rocket.mapPlayer, Double2.zero, PlayerController.main.player.Value.GetSizeRadius() + 100));
         }
         
         static void Execute(Location location)
