@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Media;
+using System.Linq;
 using SFS.Input;
-using SFS.Translations;
 using SFS.UI;
 using SFS.UI.ModGUI;
 using SFS.WorldBase;
 using UnityEngine;
-using SoundPlayer = SFS.Audio.SoundPlayer;
+using UnityEngine.UI;
 using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator
 {
     public static class SearchHandler
     {
-        const float windowScale = 0.75f;
+        private const float windowScale = 0.75f;
         public static void OpenMenu()
         {
             Menu.textInput.Open("Back", "Search", OnSearch, CloseMode.Current, TextInputMenu.Element("Planet Search", string.Empty));
@@ -38,23 +37,17 @@ namespace Warpinator
             }
         }
 
-        static List<Planet> FindMatches(string input)
+        private static List<Planet> FindMatches(string input)
         {
             input = input.ToLowerInvariant();
             List<Planet> matches = new();
             if (string.IsNullOrWhiteSpace(input)) return matches;
 
-            foreach (Planet planet in PlanetSelectMenu.planets)
-            {
-                if (planet.name.ToLowerInvariant().Contains(input))
-                {
-                    matches.Add(planet);
-                }
-            }
+            matches.AddRange(PlanetSelectMenu.planets.Where(planet => planet.name.ToLowerInvariant().Contains(input)));
             return matches;
         }
 
-        static void OpenResultsMenu(List<Planet> planets)
+        private static void OpenResultsMenu(List<Planet> planets)
         {
             int columns = Mathf.Clamp((int)Math.Ceiling((double)(planets.Count / 13)), 2, 4);
             int rows = Mathf.Clamp((int)Math.Ceiling((double)planets.Count / columns), 2, 13);
@@ -65,11 +58,11 @@ namespace Warpinator
                 var rectTransform = containerObject.AddComponent<RectTransform>();
                 rectTransform.sizeDelta = new Vector2(0, 0);
                 
-                var scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 275 * columns, 50 + 58 * rows, 0, 0, false, false, 1, "Search Results");
+                Window scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 275 * columns, 50 + 58 * rows, 0, 0, false, false, 1, "Search Results");
 
                 scroll.Position = new Vector2(0, scroll.Size.y * windowScale / 2);
                 
-                var layout = scroll.CreateLayoutGroup(Type.Vertical);
+                HorizontalOrVerticalLayoutGroup layout = scroll.CreateLayoutGroup(Type.Vertical);
                 layout.spacing = 7;
                 layout.childAlignment = TextAnchor.MiddleCenter;
                 scroll.EnableScrolling(Type.Vertical);

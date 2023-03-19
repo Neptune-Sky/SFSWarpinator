@@ -8,6 +8,7 @@ using SFS.Audio;
 using SFS.UI.ModGUI;
 using SFS.World;
 using UnityEngine;
+using UnityEngine.UI;
 using Button = SFS.UI.ModGUI.Button;
 using Type = SFS.UI.ModGUI.Type;
 
@@ -15,12 +16,12 @@ namespace Warpinator
 {
     public static class PlanetSelectMenu
     {
-        static List<MenuElement> menuElements = new();
+        private static List<MenuElement> menuElements = new();
         public static List<Planet> planets = new();
-        const float windowScale = 0.75f;
-        const float buttonTextScale = 0.875f;
-        
-        static void CreateDefault()
+        private const float windowScale = 0.75f;
+        private const float buttonTextScale = 0.875f;
+
+        private static void CreateDefault()
         {
             menuElements.Clear();
             planets.Clear();
@@ -34,16 +35,16 @@ namespace Warpinator
                 var rectTransform = containerObject.AddComponent<RectTransform>();
                 rectTransform.sizeDelta = new Vector2(0, 0);
                 
-                var scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 275 * columns, 50 + 58 * rows, 0, 0, false, false, 1, "Warpinator");
+                Window scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 275 * columns, 50 + 58 * rows, 0, 0, false, false, 1, "Warpinator");
 
                 scroll.Position = new Vector2(0, scroll.Size.y * windowScale / 2);
 
-                var searchButton = Builder.CreateButton(scroll.gameObject.transform, 120, 42, 0, 0, SearchHandler.OpenMenu, "Search...");
+                Button searchButton = Builder.CreateButton(scroll.gameObject.transform, 120, 42, 0, 0, SearchHandler.OpenMenu, "Search...");
                 searchButton.gameObject.GetComponentInChildren<TextAdapter>().gameObject.transform.localScale =
                     new Vector3(buttonTextScale, buttonTextScale);
                 searchButton.gameObject.transform.localPosition = new Vector3(-(scroll.Size.x / 2) + searchButton.Size.x / 2 + 15, -(searchButton.Size.y / 2) - 5);
                 
-                var layout = scroll.CreateLayoutGroup(Type.Vertical);
+                HorizontalOrVerticalLayoutGroup layout = scroll.CreateLayoutGroup(Type.Vertical);
                 layout.spacing = 7;
                 layout.childAlignment = TextAnchor.MiddleCenter;
                 scroll.EnableScrolling(Type.Vertical);
@@ -63,7 +64,7 @@ namespace Warpinator
             
             Container horizontal = Builder.CreateContainer(parent);
             horizontal.CreateLayoutGroup(Type.Horizontal);
-            for (int i = 0; i < planetList.Count; i++)
+            for (var i = 0; i < planetList.Count; i++)
             {
                 Planet planet = planetList[i];
 
@@ -72,7 +73,7 @@ namespace Warpinator
                     horizontal = Builder.CreateContainer(parent);
                     horizontal.CreateLayoutGroup(Type.Horizontal);
                 }
-                var button = Builder.CreateButton(horizontal, 250, 50, 0, 0, () =>
+                Button button = Builder.CreateButton(horizontal, 250, 50, 0, 0, () =>
                 {
                     PlanetTeleportMenu.Open(planet);
                 }, planet.name);
@@ -89,7 +90,7 @@ namespace Warpinator
                 MsgDrawer.main.Log("You aren't controlling a rocket!");
                 return;
             }
-            List<Planet> planets2 = new List<Planet>();
+            var planets2 = new List<Planet>();
             planets2.AddRange(Base.planetLoader.planets.Values);
 
             if (planets2 != planets) CreateDefault();

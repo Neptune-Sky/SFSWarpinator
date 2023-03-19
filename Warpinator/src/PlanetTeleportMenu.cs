@@ -5,14 +5,16 @@ using SFS.UI.ModGUI;
 using SFS.WorldBase;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static SFS.UI.MenuGenerator;
 using static SFS.UI.ModGUI.Builder;
+using Button = SFS.UI.ModGUI.Button;
 
 namespace Warpinator
 {
-    static class PlanetTeleportMenu
+    internal static class PlanetTeleportMenu
     {
-        static double DefaultHeight(Planet planet)
+        private static double DefaultHeight(Planet planet)
         {
             return planet.HasAtmospherePhysics ? planet.AtmosphereHeightPhysics * 1.1 : (planet.TimewarpRadius_Descend - planet.Radius) * 1.1;
         }
@@ -24,21 +26,21 @@ namespace Warpinator
             
             var output = new MenuElement(delegate(GameObject root)
             {
-                GameObject containerObject = new GameObject("ModGUI Container");
+                var containerObject = new GameObject("ModGUI Container");
                 containerObject.transform.SetParent(root.transform);
-                RectTransform rectTransform = containerObject.AddComponent<RectTransform>();
+                var rectTransform = containerObject.AddComponent<RectTransform>();
                 rectTransform.sizeDelta = new Vector2(0, 0);
                 
                 Window window = CreateWindow(rectTransform, GetRandomID(), 500, 550, 0, 0, false, false, 1, "Teleport to " + planet.name);
 
                 window.Position = new Vector2(0, window.Size.y * scale / 2);
-                var layout = window.CreateLayoutGroup(Type.Vertical);
+                HorizontalOrVerticalLayoutGroup layout = window.CreateLayoutGroup(Type.Vertical);
                 layout.spacing = 20;
                 layout.childAlignment = TextAnchor.MiddleCenter;
                 Container menuSelect = CreateContainer(window);
                 menuSelect.CreateLayoutGroup(Type.Horizontal, TextAnchor.UpperCenter, spacing: 10);
-                var orbitButton = CreateButton(menuSelect, 200, 45, text: "Orbit");
-                var surfaceButton = CreateButton(menuSelect, 200, 45, text: "Surface");
+                Button orbitButton = CreateButton(menuSelect, 200, 45, text: "Orbit");
+                Button surfaceButton = CreateButton(menuSelect, 200, 45, text: "Surface");
 
                 Container orbitMenu = OrbitMenu(window, planet);
                 Container surfaceMenu = SurfaceMenu(window, planet);
@@ -75,7 +77,7 @@ namespace Warpinator
             OpenMenu(CancelButton.Cancel, CloseMode.Stack, menuElements.ToArray());
         }
 
-        static Container OrbitMenu(Window window, Planet planet)
+        private static Container OrbitMenu(Window window, Planet planet)
         {
             Container ToReturn = CreateContainer(window);
             ToReturn.CreateLayoutGroup(Type.Vertical);
@@ -86,14 +88,14 @@ namespace Warpinator
             Container orbitHeightContainer = CreateContainer(parameters);
             orbitHeightContainer.CreateLayoutGroup(Type.Horizontal, TextAnchor.MiddleCenter, 10);
             
-            var heightLabel = CreateLabel(orbitHeightContainer, 200, 35, text: "Orbit Height:");
+            Label heightLabel = CreateLabel(orbitHeightContainer, 200, 35, text: "Orbit Height:");
             heightLabel.TextAlignment = TextAlignmentOptions.Left;
-            var orbitInput = CustomUI.CreateNumberInput(orbitHeightContainer, 200, 45, DefaultHeight(planet), 0, (planet.SOI - planet.Radius) * 0.999);
+            NumberInput orbitInput = CustomUI.CreateNumberInput(orbitHeightContainer, 200, 45, DefaultHeight(planet), 0, (planet.SOI - planet.Radius) * 0.999);
 
             CreateSeparator(parameters, 410);
             
-            bool counterclockwise = false;
-            var toggle = CreateToggleWithLabel(parameters, 410, 35, () => counterclockwise, () => counterclockwise = !counterclockwise, labelText: "Counterclockwise:");
+            var counterclockwise = false;
+            ToggleWithLabel toggle = CreateToggleWithLabel(parameters, 410, 35, () => counterclockwise, () => counterclockwise = !counterclockwise, labelText: "Counterclockwise:");
             toggle.label.TextAlignment = TextAlignmentOptions.Left;
             
             Box statBox = CreateBox(ToReturn, 450, 180);
@@ -132,7 +134,7 @@ namespace Warpinator
             return ToReturn;
         }
 
-        static Container SurfaceMenu(Window window, Planet planet)
+        private static Container SurfaceMenu(Window window, Planet planet)
         {
             Container ToReturn = CreateContainer(window);
             ToReturn.CreateLayoutGroup(Type.Vertical);
@@ -144,7 +146,7 @@ namespace Warpinator
             parametersContainer.CreateLayoutGroup(Type.Horizontal, TextAnchor.MiddleCenter, 10);
             
             CreateLabel(parametersContainer, 200, 35, text: "Surface Angle:").TextAlignment = TextAlignmentOptions.Left;
-            var input = CustomUI.CreateNumberInput(parametersContainer, 200, 45, 0, -360, 360);
+            NumberInput input = CustomUI.CreateNumberInput(parametersContainer, 200, 45, 0, -360, 360);
             
             Box box = CreateBox(ToReturn, 450, 100);
             box.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 10);

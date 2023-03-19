@@ -15,9 +15,9 @@ namespace Warpinator
 
     public class Config : ModSettings<SettingsData>
     {
-        static Config main;
+        private static Config main;
 
-        Action saveAction;
+        private Action saveAction;
 
         protected override FilePath SettingsFile { get; } = Main.modFolder.ExtendToFile("Config.txt");
 

@@ -12,13 +12,14 @@ namespace Warpinator
 {
     public static class MoveRocket
     {
-        enum InvalidType
+        private enum InvalidType
         {
             None,
             BelowTerrain,
             InsideAtmosphere
         }
-        static InvalidType OrbitCheck(Planet planet, double distance)
+
+        private static InvalidType OrbitCheck(Planet planet, double distance)
         {
             double rocketHeight = ((Rocket)PlayerController.main.player.Value).GetSizeRadius();
             if (distance < planet.maxTerrainHeight + rocketHeight && planet.data.terrain.collider)
@@ -54,12 +55,12 @@ namespace Warpinator
             }
         }
 
-        static void ExecutePerfectOrbit(Planet planet, double distance, bool counterclockwise = false)
+        private static void ExecutePerfectOrbit(Planet planet, double distance, bool counterclockwise = false)
         {
             MsgDrawer.main.Log("Teleporting to " + planet.DisplayName);
             Double2 parameters = GetOrbitParameters(planet, distance);
             double velocity = counterclockwise ? -parameters.y : parameters.y;
-            Location location = new Location(0, planet, new Double2(0, parameters.x), new Double2(velocity, 0));
+            var location = new Location(0, planet, new Double2(0, parameters.x), new Double2(velocity, 0));
             
             Execute(location);
             
@@ -74,8 +75,8 @@ namespace Warpinator
 
             return new Double2(distance, velocity);
         }
-        
-        static Location GetNearRocket(Rocket rocket)
+
+        private static Location GetNearRocket(Player rocket)
         {
             Double2 addPos = new Double2(0, rocket.GetSizeRadius() * 1.1 +  PlayerController.main.player.Value.GetSizeRadius() * 1.1).Rotate(270 * Mathf.Deg2Rad);
             double rocketAngle = rocket.location.position.Value.AngleRadians;
@@ -84,7 +85,7 @@ namespace Warpinator
         }
         public static void ToRocket(Rocket rocket)
         {
-            string name = String.IsNullOrEmpty(rocket.rocketName) ? "Rocket" : rocket.rocketName;
+            string name = string.IsNullOrEmpty(rocket.rocketName) ? "Rocket" : rocket.rocketName;
             MsgDrawer.main.Log("Teleporting to " + name);
             Execute(GetNearRocket(rocket));
             
@@ -96,31 +97,31 @@ namespace Warpinator
         {
             double angle = degrees * Mathf.Deg2Rad;
             MsgDrawer.main.Log("Teleporting to " + planet.DisplayName);
-            var position = new Double2(
+            Double2 position = new Double2(
                 0,
                 planet.GetTerrainHeightAtAngle(angle + 90 * Mathf.Deg2Rad) + planet.Radius + PlayerController.main.player.Value.GetSizeRadius() / 2 + 3
                 ).Rotate(angle);
 
-            Location location = new Location(0, planet, position, new Double2(0, 0));
+            var location = new Location(0, planet, position, new Double2(0, 0));
             Execute(location);
             
-            Rocket rocket = PlayerController.main.player.Value as Rocket;
+            var rocket = PlayerController.main.player.Value as Rocket;
             if (rocket == null) return;
             rocket.EnableCollisionImmunity(6);
             rocket.partHolder.transform.eulerAngles = new Vector3(0, 0, (float)location.position.AngleDegrees - 90);
             
             Map.view.SetViewSmooth(new MapView.View(rocket.mapPlayer, Double2.zero, PlayerController.main.player.Value.GetSizeRadius() + 100));
         }
-        
-        static void Execute(Location location)
+
+        private static void Execute(Location location)
         {
             ScreenManager.main.CloseStack();
             
             WorldTime.main.SetState(0, false, false);
-            var indexOf = GameManager.main.rockets.IndexOf(PlayerController.main.player.Value as Rocket);
+            int indexOf = GameManager.main.rockets.IndexOf(PlayerController.main.player.Value as Rocket);
             PlayerController.main.player.Value = null;
             
-            Location nullLocation = new Location(0, location.planet, new Double2(0, 0), new Double2(0, 0));
+            var nullLocation = new Location(0, location.planet, new Double2(0, 0), new Double2(0, 0));
             
             GameManager.main.rockets[indexOf].physics.SetLocationAndState(nullLocation, false);
                     

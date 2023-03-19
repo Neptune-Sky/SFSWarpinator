@@ -2,6 +2,7 @@
 using ModLoader.Helpers;
 using UnityEngine;
 using static SFS.Input.KeybindingsPC;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Warpinator
 {
@@ -12,7 +13,7 @@ namespace Warpinator
 
     public class WarpKeybindings : ModKeybindings
     {
-        static readonly DefaultKeys DefaultKeys = new();
+        private static readonly DefaultKeys DefaultKeys = new();
 
         #region Keys
 
@@ -28,7 +29,7 @@ namespace Warpinator
             SceneHelper.OnWorldSceneLoaded += OnWorldLoad;
         }
 
-        static void OnWorldLoad() => AddOnKeyDown_World(main.openMenu, PlanetSelectMenu.Open);
+        private static void OnWorldLoad() => AddOnKeyDown_World(main.openMenu, PlanetSelectMenu.Open);
 
         public override void CreateUI()
         {

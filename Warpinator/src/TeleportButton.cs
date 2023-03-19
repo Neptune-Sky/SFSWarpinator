@@ -12,7 +12,7 @@ namespace Warpinator
         public static void Create()
         {
             
-            var parent = GameSelector.main.focusButton.button.gameObject;
+            GameObject parent = GameSelector.main.focusButton.button.gameObject;
             teleport.button = Object.Instantiate(parent).GetComponent<Button>();
             GameObject gameObject = teleport.button.gameObject;
             gameObject.transform.SetParent(parent.transform.parent);

@@ -23,7 +23,7 @@ namespace Warpinator
             double defaultVal, double min, double max, int charLimit = 100, UnityAction<string> onChange = null, int posX = 0,
             int posY = 0)
         {
-            NumberInput ToReturn = new NumberInput
+            var ToReturn = new NumberInput
             {
                 textInput = Builder.CreateTextInput(parent, width, height, posX, posY, defaultVal.ToString(CultureInfo.InvariantCulture), onChange),
                 oldText = defaultVal.ToString(CultureInfo.InvariantCulture),
@@ -36,7 +36,8 @@ namespace Warpinator
             ToReturn.textInput.OnChange += _ => Numberify(ToReturn);
             return ToReturn;
         }
-        static void Numberify(NumberInput data)
+
+        private static void Numberify(NumberInput data)
         {
             double numCheck;
             try

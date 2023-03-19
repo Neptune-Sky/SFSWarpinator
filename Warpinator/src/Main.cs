@@ -34,7 +34,7 @@ namespace Warpinator
             }
         };
 
-        private string[] changelog = 
+        private readonly string[] changelog = 
         {
             "Fixed a typo in orbit selection menu",
             "Added surface teleporter prototype",
@@ -61,14 +61,14 @@ namespace Warpinator
                     var rectTransform = containerObject.AddComponent<RectTransform>();
                     rectTransform.sizeDelta = new Vector2(0, 0);
                     
-                    var scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 500, 350, 0, 0, false, false, 1, "Warpinator Changelog");
+                    Window scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 500, 350, 0, 0, false, false, 1, "Warpinator Changelog");
                     
                     scroll.Position = new Vector2(0, scroll.Size.y / 2);
             
-                    var layout = scroll.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 7);
+                    scroll.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 7);
                     scroll.EnableScrolling(Type.Vertical);
                     containerObject.transform.SetParent(root.transform);
-                    foreach (var line in changelog)
+                    foreach (string line in changelog)
                     {
                         Builder.CreateLabel(scroll, 470, 32, text: "- " + line).TextAlignment = TextAlignmentOptions.Left;
                     }
