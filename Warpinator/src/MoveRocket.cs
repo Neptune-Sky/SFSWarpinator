@@ -1,5 +1,4 @@
 using System;
-using System.Media;
 using SFS.Input;
 using SFS.UI;
 using SFS.World;

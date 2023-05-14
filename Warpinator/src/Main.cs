@@ -8,11 +8,9 @@ using SFS.Input;
 using SFS.IO;
 using SFS.UI;
 using SFS.UI.ModGUI;
-using SFS.WorldBase;
 using TMPro;
 using UITools;
 using UnityEngine;
-using UnityEngine.UI;
 using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator

@@ -16,7 +16,7 @@ namespace Warpinator
 {
     public static class PlanetSelectMenu
     {
-        private static List<MenuElement> menuElements = new();
+        private static readonly List<MenuElement> menuElements = new();
         public static List<Planet> planets = new();
         private const float windowScale = 0.75f;
         private const float buttonTextScale = 0.875f;
