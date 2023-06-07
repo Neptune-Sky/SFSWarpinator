@@ -7,7 +7,7 @@ namespace Warpinator
 {
     public static class TeleportButton
     {
-        private static readonly GameSelector.SelectMenuButton teleport = new();
+        private static readonly IconButton teleport = new();
         public static void Create()
         {
             

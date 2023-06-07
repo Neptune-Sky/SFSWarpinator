@@ -21,8 +21,8 @@ namespace Warpinator
         public override string ModNameID => "Warpinator";
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
-        public override string MinimumGameVersionNecessary => "1.5.9.8";
-        public override string ModVersion => "v0.7.0-alpha";
+        public override string MinimumGameVersionNecessary => "1.5.10.2";
+        public override string ModVersion => "v0.7.1-alpha";
         public override string Description => "A teleporter for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
@@ -34,10 +34,7 @@ namespace Warpinator
 
         private readonly string[] changelog = 
         {
-            "Fixed a typo in orbit selection menu",
-            "Added surface teleporter prototype",
-            "Counterclockwise toggle for orbit teleporter",
-            "Added this changelog window"
+            "Fixed issues with the new update"
         };
         public static FolderPath modFolder;
         public override Action LoadKeybindings => WarpKeybindings.LoadKeybindings;
