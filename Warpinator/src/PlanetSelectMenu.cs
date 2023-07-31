@@ -51,7 +51,6 @@ namespace Warpinator
 
             var comparer = new GenericPropertyComparer<Planet, string>(obj =>obj.DisplayName, StringComparer.OrdinalIgnoreCase);
             planets = planets.OrderBy(planet => planet, comparer).ToList();
-            Debug.Log(planets.Count);
             
             Utilities.FindRowsAndColumns((2, 13), (2, 4), planets.Count, out int rows, out int columns);
             
@@ -84,10 +83,8 @@ namespace Warpinator
 
         public static void CreateButtons<T>(List<T> list, Transform parent, int minColumns = 2, int maxColumns = 4)
         {
-            Debug.Log(list.Count);
             // Calculate the number of columns based on the list size and clamped by minColumns and maxColumns.
             int columns = Mathf.Clamp((int)Math.Ceiling((decimal)list.Count / 13), minColumns, maxColumns);
-            Debug.Log("Button Columns: " + columns);
 
             // Create horizontal container and layout group to organize buttons.
             Container horizontal = Builder.CreateContainer(parent);

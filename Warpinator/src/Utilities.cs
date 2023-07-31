@@ -30,7 +30,6 @@ namespace Warpinator
         public static void FindRowsAndColumns((int min, int max) minMaxRows, (int min, int max) minMaxColumns, int buttonCount, out int rows, out int columns)
         {
             columns = Mathf.Clamp((int)Math.Ceiling((decimal)buttonCount / 13), minMaxColumns.min, minMaxColumns.max);
-            Debug.Log("Columns: " + columns);
             rows = Mathf.Clamp((int)Math.Ceiling(buttonCount / (double)columns), minMaxRows.min, minMaxRows.max);
         }
 
