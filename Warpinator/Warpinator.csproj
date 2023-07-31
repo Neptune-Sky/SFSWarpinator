@@ -465,8 +465,9 @@
     <Compile Include="src\Main.cs" />
     <Compile Include="src\CustomKeybindings.cs" />
     <Compile Include="src\MoveRocket.cs" />
-    <Compile Include="src\PlanetTeleportMenu.cs" />
+    <Compile Include="src\PlanetTeleportMenus.cs" />
     <Compile Include="src\PlanetSelectMenu.cs" />
+    <Compile Include="src\Utilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

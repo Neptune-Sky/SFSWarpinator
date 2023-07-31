@@ -28,7 +28,7 @@ namespace Warpinator
                         MenuGenerator.ShowChoices(() => "No results found.", ButtonBuilder.CreateButton(null, () => "Okay", null, CloseMode.Current));
                         break;
                     case 1:
-                        PlanetTeleportMenu.Open(searchResults[0]);
+                        PlanetTeleportMenus.Open(searchResults[0]);
                         break;
                     default:
                         OpenResultsMenu(searchResults);
@@ -43,7 +43,7 @@ namespace Warpinator
             List<Planet> matches = new();
             if (string.IsNullOrWhiteSpace(input)) return matches;
 
-            matches.AddRange(PlanetSelectMenu.planets.Where(planet => planet.name.ToLowerInvariant().Contains(input)));
+            matches.AddRange(PlanetSelectMenu.planets.Where(planet => planet.DisplayName.Inject("", "").GetText().ToLowerInvariant().Contains(input)));
             return matches;
         }
 
@@ -67,7 +67,7 @@ namespace Warpinator
                 layout.childAlignment = TextAnchor.MiddleCenter;
                 scroll.EnableScrolling(Type.Vertical);
                 if (planets.Count <= 2) Builder.CreateSpace(scroll, 0, 25);
-                PlanetSelectMenu.CreatePlanetButtons(planets, scroll);
+                PlanetSelectMenu.CreateButtons(planets, scroll);
                 
                 scroll.gameObject.transform.localScale = new Vector3(windowScale, windowScale);
                 containerObject.transform.SetParent(root.transform);

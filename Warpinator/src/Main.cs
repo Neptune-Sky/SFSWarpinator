@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ModLoader;
 using HarmonyLib;
-using JetBrains.Annotations;
 using ModLoader.Helpers;
 using SFS.Input;
 using SFS.IO;
@@ -15,93 +14,115 @@ using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator
 {
-    [UsedImplicitly]
     public class Main : Mod, IUpdatable
     {
+        // Properties with brief comments.
         public override string ModNameID => "Warpinator";
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.10.2";
-        public override string ModVersion => "v0.7.1-alpha";
+        public override string ModVersion => "v0.8.0-alpha";
         public override string Description => "A teleporter for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
+            // Dictionary with the link to the mod update and file path.
             {
                 "https://github.com/Neptune-Sky/SFSWarpinator/releases/latest/download/Warpinator.dll",
                 new FolderPath(ModFolder).ExtendToFile("Warpinator.dll")
             }
         };
 
-        private readonly string[] changelog = 
+        // Changelog for the current version.
+        private readonly string[] changelog =
         {
-            "Fixed issues with the new update"
+            "Added the ability to use landmarks for surface teleport",
+            "Misc. minor tweaks/improvements"
         };
+
+        // Fields.
         public static FolderPath modFolder;
-        public override Action LoadKeybindings => WarpKeybindings.LoadKeybindings;
-    
-        // This initializes the patcher. This is required if you use any Harmony patches.
         private static Harmony patcher;
-    
         public static Main main;
-    
+
+        // LoadKeybindings property to load keybindings when the mod is loaded.
+        public override Action LoadKeybindings => WarpKeybindings.LoadKeybindings;
+
+        // Called when the mod is loaded.
         public override void Load()
         {
-            // This tells the loader what to run when your mod is loaded.
+            // Attach the TeleportButton.Create method to the WorldSceneLoaded event.
             SceneHelper.OnWorldSceneLoaded += TeleportButton.Create;
+
+            // Show the changelog if there are updates and the user hasn't disabled it.
             if (Config.settings.configVersion != ModVersion && !Config.settings.noChangelogs)
             {
                 var menuElement = new MenuElement(delegate(GameObject root)
                 {
+                    // Create the changelog window.
                     var containerObject = new GameObject("ModGUI Container");
                     var rectTransform = containerObject.AddComponent<RectTransform>();
                     rectTransform.sizeDelta = new Vector2(0, 0);
-                    
+
                     Window scroll = Builder.CreateWindow(rectTransform, Builder.GetRandomID(), 500, 350, 0, 0, false, false, 1, "Warpinator Changelog");
-                    
                     scroll.Position = new Vector2(0, scroll.Size.y / 2);
-            
-                    scroll.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 7);
+
+                    // Populate the changelog window with the changelog entries.
+                    scroll.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 15);
                     scroll.EnableScrolling(Type.Vertical);
                     containerObject.transform.SetParent(root.transform);
+                    Builder.CreateSpace(scroll, 0, 2);
                     foreach (string line in changelog)
                     {
-                        Builder.CreateLabel(scroll, 470, 32, text: "- " + line).TextAlignment = TextAlignmentOptions.Left;
+                        var label = Builder.CreateLabel(scroll, 470, 32, text: "- " + line);
+                        label.TextAlignment = TextAlignmentOptions.MidlineLeft;
+                        label.AutoFontResize = false;
+                        label.FontSize = 22;
                     }
 
                     Builder.CreateSpace(scroll, 0, 40);
                     Container okayButton = Builder.CreateContainer(scroll.gameObject.transform, 0, (int)-scroll.Size.y + 45);
                     okayButton.CreateLayoutGroup(Type.Horizontal);
 
+                    // Create a toggle to disable showing the changelog again.
                     Builder.CreateToggleWithLabel(okayButton, 300, 40,
                         () => Config.settings.noChangelogs,
                         () => Config.settings.noChangelogs = !Config.settings.noChangelogs,
                         labelText: "Don't show this again"
-                    );//.toggle.gameObject.transform.localScale = new Vector3(0.9f, 0.9f);
+                    );
+
+                    // Create the "Okay" button to close the changelog window.
                     Builder.CreateButton(okayButton, 100, 50, onClick: () =>
                     {
                         Config.Save();
                         ScreenManager.main.CloseCurrent();
                     }, text: "Okay");
                 });
+
+                // Open the changelog menu.
                 MenuGenerator.OpenMenu(CancelButton.Cancel, CloseMode.None, menuElement);
-                
             }
 
+            // Update the config version.
             Config.settings.configVersion = ModVersion;
         }
-    
+
+        // Called before anything from the game is loaded.
         public override void Early_Load()
         {
-            // This method runs before anything from the game is loaded. This is where you should apply your patches, as shown below.
+            // Set modFolder and main references.
             modFolder = new FolderPath(ModFolder);
             main = this;
+
+            // Load config settings.
             Config.Load();
-            // The patcher uses an ID formatted like a web domain.
+
+            // Create the Harmony patcher.
             patcher = new Harmony("Neptune.Warpinator.Mod");
-    
-            // This pulls your Harmony patches from everywhere in the namespace and applies them.
+
+            // Apply Harmony patches from the namespace.
             patcher.PatchAll();
         }
     }
 }
+
 

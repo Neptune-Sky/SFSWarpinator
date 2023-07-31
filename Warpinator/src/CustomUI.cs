@@ -4,6 +4,12 @@ using SFS.UI.ModGUI;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using SFS.Parts.Modules;
+using SFS.UI;
+using UnityEngine.UI;
+using Button = SFS.UI.ModGUI.Button;
+using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator
 {
@@ -37,66 +43,108 @@ namespace Warpinator
             return ToReturn;
         }
 
+        // This method is used to process and validate the input in the NumberInput object.
         private static void Numberify(NumberInput data)
         {
-            double numCheck;
-            try
+            // Retrieve the TextInput instance from the NumberInput object.
+            TextInput input = data.textInput;
+
+            // Trim the text to remove any leading or trailing whitespaces.
+            input.Text = input.Text.Trim();
+
+            // Try to parse the text input as a double using the InvariantCulture format.
+            // If parsing fails, handle the different scenarios.
+            if (!double.TryParse(input.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out double parsedText))
             {
-                numCheck = double.Parse(data.textInput.Text, CultureInfo.InvariantCulture);
-            }
-            catch
-            {
+                // Case when the input is not a valid number.
+
+                // Check if the minimum value allowed is non-negative.
                 if (data.min >= 0)
                 {
-                    switch (data.textInput.Text)
+                    // If the input text is ".", set the currentVal to 0 and store the oldText.
+                    if (input.Text == ".")
                     {
-                        case "." or "":
-                            data.currentVal = 0;
-                            return;
-                        case "-":
-                            data.textInput.Text = "";
-                            data.oldText = "";
-                            return;
+                        data.currentVal = 0;
+                        data.oldText = input.Text;
+                        return;
+                    }
+                    
+                    // If the input text is empty, set the currentVal to 0, clear the input text, and store the oldText.
+                    if (input.Text == "")
+                    {
+                        data.oldText = input.Text = "";
+                        return;
                     }
                 }
-                else if (Regex.IsMatch(data.textInput.Text, "^-?\\.?$"))
+                else if (Regex.IsMatch(input.Text, "^-?\\.?$"))
                 {
+                    // If the input text matches the pattern for "-", "-.", or ".", set the currentVal to 0 and store the oldText.
                     data.currentVal = 0;
+                    data.oldText = input.Text;
                     return;
                 }
 
-                data.textInput.Text = data.oldText;
+                // If none of the special cases apply, restore the old text in the input and return.
+                input.Text = data.oldText;
                 return;
             }
-            if (data.textInput.Text.Length > data.charLimit)
+
+            // If parsing succeeded, the input is a valid number.
+            // Check if the input length exceeds the character limit. If so, restore the old text and return.
+            if (input.Text.Length > data.charLimit)
             {
-                data.textInput.Text = data.oldText;
+                input.Text = data.oldText;
             }
 
-            if (Regex.IsMatch(data.textInput.Text, "^-?0+[1-9]"))
+            // If the input text starts with "-0" or "0.", remove the leading zeros.
+            if (Regex.IsMatch(input.Text, "^-?0+[1-9.]"))
             {
-                Regex regex = new("0+");
-                data.textInput.Text = regex.Replace(data.textInput.Text, "", 1);
+                Regex regex = new Regex("0+");
+                input.Text = regex.Replace(input.Text, "", 1);
             }
 
-            if (numCheck < data.min)
+            // Check if the parsed number is less than the minimum allowed value.
+            if (parsedText < data.min)
             {
-                data.currentVal = Math.Floor(data.min);
+                // Set the currentVal to the minimum value, rounded up to the nearest integer if data.min >= 0,
+                // otherwise, round it down to the nearest integer.
+                data.currentVal = parsedText >= 0 ? Math.Ceiling(data.min) : Math.Floor(data.min);
+
+                // If the minimum value is less than or equal to 0, set the input text to the minimum value.
                 if (data.min <= 0)
                 {
-                    data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
+                    input.Text = data.min.ToString(CultureInfo.InvariantCulture);
                 }
-                
             }
-            else if (numCheck > data.max)
+            // Check if the parsed number is greater than the maximum allowed value.
+            else if (parsedText > data.max)
             {
+                // Set the currentVal to the maximum value, rounded down to the nearest integer.
                 data.currentVal = Math.Floor(data.max);
-                data.textInput.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
-            }
-            else
-                data.currentVal = numCheck.Round(0.000001);
 
-            data.oldText = data.textInput.Text;
+                // Set the input text to the maximum value.
+                input.Text = data.currentVal.ToString(CultureInfo.InvariantCulture);
+            }
+            // If the number is within the valid range, round it to a precision of 0.000001.
+            else
+                data.currentVal = parsedText.Round(0.000001);
+
+            // Store the current input text as the oldText for future reference.
+            data.oldText = input.Text;
+        }
+
+        public static Button UnboundedButton(Window window, int width, int height, int posX, int posY,
+            Action onClick = null, string text = "", bool keepButtonOutOfWindow = false)
+        {
+            Button output = Builder.CreateButton(window.gameObject.transform, width, height, 0, 0, onClick, text);
+            
+            posX -= (int)((window.Size.x / 2) - width / 2);
+
+            if (keepButtonOutOfWindow && posY < 0) posY -= (int)(window.Size.y + Math.Round((double)height / 2));
+            else posY -= (int)Math.Round((decimal)height / 2);
+            
+            output.gameObject.transform.localPosition = new Vector3(posX, posY);
+            return output;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Warpinator
                 switch (GameSelector.main.selected.Value)
                 {
                     case MapPlanet mapPlanet:
-                        PlanetTeleportMenu.Open(mapPlanet.planet);
+                        PlanetTeleportMenus.Open(mapPlanet.planet);
                         break;
                     case MapRocket mapRocket:
                         MoveRocket.ToRocket(mapRocket.rocket);

@@ -92,10 +92,13 @@ namespace Warpinator
             Map.view.SetViewSmooth(new MapView.View(PlayerController.main.player.Value.mapPlayer, Double2.zero, rocket.GetSizeRadius() + 100));
         }
 
-        public static void PlanetSurface(Planet planet, double degrees)
+        public static void PlanetSurface(Planet planet, double degrees, string landmarkName = "")
         {
             double angle = degrees * Mathf.Deg2Rad;
-            MsgDrawer.main.Log("Teleporting to " + planet.DisplayName);
+
+            if (landmarkName != "") landmarkName = " (" + landmarkName + ")";
+            
+            MsgDrawer.main.Log("Teleporting to " + planet.DisplayName + landmarkName);
             Double2 position = new Double2(
                 0,
                 planet.GetTerrainHeightAtAngle(angle + 90 * Mathf.Deg2Rad) + planet.Radius + PlayerController.main.player.Value.GetSizeRadius() / 2 + 3
