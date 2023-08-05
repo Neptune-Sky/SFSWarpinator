@@ -121,7 +121,7 @@ namespace Warpinator
             
             WorldTime.main.SetState(0, false, false);
             int indexOf = GameManager.main.rockets.IndexOf(PlayerController.main.player.Value as Rocket);
-            PlayerController.main.player.Value = null;
+            PlayerController.main.player.Value = new Rocket();
             
             var nullLocation = new Location(0, location.planet, new Double2(0, 0), new Double2(0, 0));
             

@@ -21,7 +21,7 @@ namespace Warpinator
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.10.2";
-        public override string ModVersion => "v0.8.0-alpha";
+        public override string ModVersion => "v0.8.1-alpha";
         public override string Description => "A teleporter for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
@@ -35,8 +35,7 @@ namespace Warpinator
         // Changelog for the current version.
         private readonly string[] changelog =
         {
-            "Added the ability to use landmarks for surface teleport",
-            "Misc. minor tweaks/improvements"
+            "Attempt at fixing MoreParts incompatibility"
         };
 
         // Fields.
