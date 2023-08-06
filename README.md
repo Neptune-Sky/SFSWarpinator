@@ -2,7 +2,7 @@
 An upgraded teleporter mod for Spaceflight Simulator.
 
 # Features
-- Teleport button when selecting a planet/rocket. Selecting a planet will bring up a menu for selecting orbit height.
+- Teleport button when selecting a planet/rocket. Selecting a planet will bring up a menu for setting an orbit around it or teleporting to its surface, using landmarks or an angle relative to the "top" of the planet.
 - Planet selector menu, so you don't need to click the planet in the map. Press the backqoute (`) key to open it.
 
 This mod supports custom solar systems.
