@@ -4,12 +4,7 @@ using SFS.UI.ModGUI;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using SFS.Parts.Modules;
-using SFS.UI;
-using UnityEngine.UI;
 using Button = SFS.UI.ModGUI.Button;
-using Type = SFS.UI.ModGUI.Type;
 
 namespace Warpinator
 {

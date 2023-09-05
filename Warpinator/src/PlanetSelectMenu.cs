@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using SFS.UI;
@@ -20,8 +19,8 @@ namespace Warpinator
 {
     public class GenericPropertyComparer<T, TKey> : IComparer<T>
     {
-        private Func<T, TKey> _keySelector;
-        private IComparer<TKey> _keyComparer;
+        private readonly Func<T, TKey> _keySelector;
+        private readonly IComparer<TKey> _keyComparer;
 
         public GenericPropertyComparer(Func<T, TKey> keySelector, IComparer<TKey> keyComparer = null)
         {

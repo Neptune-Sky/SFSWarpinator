@@ -1,6 +1,5 @@
 using System;
 using SFS.IO;
-using SFS.Variables;
 using UITools;
 using UnityEngine;
 
