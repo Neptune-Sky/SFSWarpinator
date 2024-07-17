@@ -63,7 +63,8 @@ namespace Warpinator
             
             Execute(location);
             
-            Map.view.SetViewSmooth(new MapView.View(PlayerController.main.player.Value.location.planet.Value.mapPlanet, Double2.zero, (parameters.x + planet.Radius) * 1.3));
+            // Map.view.SetViewSmooth(new MapView.View(PlayerController.main.player.Value.location.planet.Value.mapPlanet, Double2.zero, (parameters.x + planet.Radius) * 1.3));
+            MoveMapCamera.ToPlanet(PlayerController.main.player.Value.location.planet.Value);
         }
 
         public static Double2 GetOrbitParameters(Planet planet, double distance)
@@ -88,8 +89,9 @@ namespace Warpinator
             MsgDrawer.main.Log("Teleporting to " + name);
             Execute(GetNearRocket(rocket));
             
-            Map.manager.mapMode.Value = false;
-            Map.view.SetViewSmooth(new MapView.View(PlayerController.main.player.Value.mapPlayer, Double2.zero, rocket.GetSizeRadius() + 100));
+            // Map.manager.mapMode.Value = false;
+            // Map.view.SetViewSmooth(new MapView.View(PlayerController.main.player.Value.mapPlayer, Double2.zero, rocket.GetSizeRadius() + 100));
+            MoveMapCamera.ToRocket(false);
         }
 
         public static void PlanetSurface(Planet planet, double degrees, string landmarkName = "")
@@ -112,7 +114,8 @@ namespace Warpinator
             rocket.EnableCollisionImmunity(6);
             rocket.partHolder.transform.eulerAngles = new Vector3(0, 0, (float)location.position.AngleDegrees - 90);
             
-            Map.view.SetViewSmooth(new MapView.View(rocket.mapPlayer, Double2.zero, PlayerController.main.player.Value.GetSizeRadius() + 100));
+            // Map.view.SetViewSmooth(new MapView.View(rocket.mapPlayer, Double2.zero, PlayerController.main.player.Value.GetSizeRadius() + 100));
+            MoveMapCamera.ToRocket(false);
         }
 
         private static void Execute(Location location)
@@ -121,7 +124,7 @@ namespace Warpinator
             
             WorldTime.main.SetState(0, false, false);
             int indexOf = GameManager.main.rockets.IndexOf(PlayerController.main.player.Value as Rocket);
-            PlayerController.main.player.Value = new Rocket();
+            PlayerController.main.player.Value = null;
             
             var nullLocation = new Location(0, location.planet, new Double2(0, 0), new Double2(0, 0));
             

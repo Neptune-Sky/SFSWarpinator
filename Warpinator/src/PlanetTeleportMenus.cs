@@ -38,7 +38,7 @@ namespace Warpinator
                 rectTransform.sizeDelta = new Vector2(0, 0);
 
                 // Window setup
-                Window window = CreateWindow(rectTransform, GetRandomID(), 500, 550, 0, 0, false, false, 1, "Teleport to " + planet.DisplayName);
+                Window window = CreateWindow(rectTransform, GetRandomID(), 500, 605, 0, 0, false, false, 1, "Teleport to " + planet.DisplayName);
                 window.Position = new Vector2(0, window.Size.y * scale / 2);
                 HorizontalOrVerticalLayoutGroup layout = window.CreateLayoutGroup(Type.Vertical);
                 layout.spacing = 20;
@@ -69,7 +69,7 @@ namespace Warpinator
                     (buttonPC == orbitButtonPC ? surfaceButtonPC : orbitButtonPC).SetSelected(false);
 
                     // Adjust window size and position
-                    window.Size = new Vector2(500, buttonPC == orbitButtonPC ? 550 : 445);
+                    window.Size = new Vector2(500, buttonPC == orbitButtonPC ? 605 : 495);
                     window.Position = new Vector2(0, window.Size.y * scale / 2);
                 }
 
@@ -132,8 +132,9 @@ namespace Warpinator
                 apoapsis.Text = "Apoapsis: " + orbitInput.currentVal.ToDistanceString();
                 periapsis.Text = "Periapsis: " + orbitInput.currentVal.ToDistanceString();
             };
-
-            Container cancelContinueButtons = CreateContainer(ToReturn);
+            Container buttonHolder = CreateContainer(ToReturn);
+            buttonHolder.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 10);
+            Container cancelContinueButtons = CreateContainer(buttonHolder);
             cancelContinueButtons.CreateLayoutGroup(Type.Horizontal, TextAnchor.MiddleCenter, 10);
             CreateButton(cancelContinueButtons, 200, 45, onClick: () => ScreenManager.main.CloseCurrent(),
                 text: "Back");
@@ -141,7 +142,10 @@ namespace Warpinator
             {
                 MoveRocket.PerfectOrbit(planet, orbitInput.currentVal, counterclockwise);
             }, "Go");
-
+            CreateButton(buttonHolder, 410, 45, 0, 0, () =>
+            {
+                MoveMapCamera.ToPlanet(planet);
+            }, "Focus Planet");
             return ToReturn;
         }
 
@@ -173,7 +177,9 @@ namespace Warpinator
             
             CreateLabel(box, 425, 90, text: "NOTE: This function is in an early state. Use at your own risk.");
             
-            Container cancelContinueButtons = CreateContainer(ToReturn);
+            Container buttonHolder = CreateContainer(ToReturn);
+            buttonHolder.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 10);
+            Container cancelContinueButtons = CreateContainer(buttonHolder);
             cancelContinueButtons.CreateLayoutGroup(Type.Horizontal, TextAnchor.MiddleCenter, 10);
             CreateButton(cancelContinueButtons, 200, 45, onClick: () => ScreenManager.main.CloseCurrent(),
                 text: "Back");
@@ -181,6 +187,10 @@ namespace Warpinator
             {
                 MoveRocket.PlanetSurface(planet, (float)input.currentVal);
             }, "Go");
+            CreateButton(buttonHolder, 410, 45, 0, 0, () =>
+            {
+                MoveMapCamera.ToPlanet(planet);
+            }, "Focus Planet");
 
             return ToReturn;
         }

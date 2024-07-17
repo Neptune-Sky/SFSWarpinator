@@ -21,7 +21,7 @@ namespace Warpinator
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
         public override string MinimumGameVersionNecessary => "1.5.10.2";
-        public override string ModVersion => "v0.8.1-alpha";
+        public override string ModVersion => "v0.8.3-alpha";
         public override string Description => "A teleporter for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
@@ -35,7 +35,8 @@ namespace Warpinator
         // Changelog for the current version.
         private readonly string[] changelog =
         {
-            "Attempt at fixing MoreParts incompatibility"
+            "Added a keybind (RCTRL) for the teleport button. Defaults to the focused planet or rocket if nothing is selected.",
+            "Added a Focus Planet button to teleport menus."
         };
 
         // Fields.
@@ -66,14 +67,14 @@ namespace Warpinator
                     scroll.Position = new Vector2(0, scroll.Size.y / 2);
 
                     // Populate the changelog window with the changelog entries.
-                    scroll.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 15);
+                    scroll.CreateLayoutGroup(Type.Vertical, TextAnchor.MiddleCenter, 25);
                     scroll.EnableScrolling(Type.Vertical);
                     containerObject.transform.SetParent(root.transform);
-                    Builder.CreateSpace(scroll, 0, 2);
+                    Builder.CreateSpace(scroll, 0, 50);
                     foreach (string line in changelog)
                     {
                         var label = Builder.CreateLabel(scroll, 470, 32, text: "- " + line);
-                        label.TextAlignment = TextAlignmentOptions.MidlineLeft;
+                        label.TextAlignment = TextAlignmentOptions.BottomLeft;
                         label.AutoFontResize = false;
                         label.FontSize = 22;
                     }

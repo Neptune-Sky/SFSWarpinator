@@ -9,6 +9,7 @@ namespace Warpinator
     public class DefaultKeys
     {
         public readonly Key openMenu = KeyCode.BackQuote;
+        public readonly Key quickTeleport = KeyCode.RightControl;
     }
 
     public class WarpKeybindings : ModKeybindings
@@ -18,6 +19,7 @@ namespace Warpinator
         #region Keys
 
         public Key openMenu = DefaultKeys.openMenu;
+        public Key quickTeleport = DefaultKeys.quickTeleport;
 
         #endregion
 
@@ -29,12 +31,17 @@ namespace Warpinator
             SceneHelper.OnWorldSceneLoaded += OnWorldLoad;
         }
 
-        private static void OnWorldLoad() => AddOnKeyDown_World(main.openMenu, PlanetSelectMenu.Open);
+        private static void OnWorldLoad()
+        {
+            AddOnKeyDown_World(main.openMenu, PlanetSelectMenu.Open);
+            AddOnKeyDown_World(main.quickTeleport, TeleportButton.Clicked);
+        }
 
         public override void CreateUI()
         {
             CreateUI_Text("Warpinator Keybindings");
             CreateUI_Keybinding(openMenu, DefaultKeys.openMenu, "Open Menu");
+            CreateUI_Keybinding(quickTeleport, DefaultKeys.quickTeleport, "Teleport");
         }
     }
 }

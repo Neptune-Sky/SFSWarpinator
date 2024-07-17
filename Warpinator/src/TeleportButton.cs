@@ -1,3 +1,4 @@
+using SFS.Audio;
 using SFS.UI;
 using SFS.World;
 using SFS.World.Maps;
@@ -37,19 +38,37 @@ namespace Warpinator
                         break;
                 }
             };
-            teleport.button.onClick += () =>
+            teleport.button.onClick += Clicked;
+        }
+        public static void Clicked()
+        {
+            if (PlayerController.main.player.Value == null)
             {
-                switch (GameSelector.main.selected.Value)
-                {
-                    case MapPlanet mapPlanet:
-                        PlanetTeleportMenus.Open(mapPlanet.planet);
-                        break;
-                    case MapRocket mapRocket:
-                        MoveRocket.ToRocket(mapRocket.rocket);
-                        break;
-                }
-            };
+                SoundPlayer.main.denySound.Play();
+                MsgDrawer.main.Log("You aren't controlling a rocket!");
+                return;
+            }
+            SelectableObject mapObject;
+            if (GameSelector.main.selected.Value != null)
+                mapObject = GameSelector.main.selected.Value;
+            else if (Map.manager.mapMode.Value)
+            {
+                mapObject = Map.view.view.target.Value;
+                if (mapObject == PlayerController.main.player.Value.mapPlayer)
+                    mapObject = PlayerController.main.player.Value.location.planet.Value.mapPlanet;
+            }
+            else
+                mapObject = PlayerController.main.player.Value.location.planet.Value.mapPlanet;
 
+            switch (mapObject)
+            {
+                case MapPlanet mapPlanet:
+                    PlanetTeleportMenus.Open(mapPlanet.planet);
+                    break;
+                case MapRocket mapRocket:
+                    MoveRocket.ToRocket(mapRocket.rocket);
+                    break;
+            }
         }
     }
 }

@@ -459,6 +459,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Config.cs" />
+    <Compile Include="src\MoveMapCamera.cs" />
     <Compile Include="src\SearchHandler.cs" />
     <Compile Include="src\TeleportButton.cs" />
     <Compile Include="src\CustomUI.cs" />

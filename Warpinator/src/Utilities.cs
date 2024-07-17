@@ -6,8 +6,9 @@ using Button = SFS.UI.ModGUI.Button;
 
 namespace Warpinator
 {
-    public class Utilities
+    public abstract class Utilities
     {
+        // ReSharper disable once UnusedType.Global
         public class GenericPropertyComparer<T, TKey> : IComparer<T>
         {
             private readonly Func<T, TKey> _keySelector;

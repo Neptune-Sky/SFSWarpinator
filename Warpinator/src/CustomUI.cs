@@ -24,7 +24,7 @@ namespace Warpinator
             double defaultVal, double min, double max, int charLimit = 100, UnityAction<string> onChange = null, int posX = 0,
             int posY = 0)
         {
-            var ToReturn = new NumberInput
+            var toReturn = new NumberInput
             {
                 textInput = Builder.CreateTextInput(parent, width, height, posX, posY, defaultVal.ToString(CultureInfo.InvariantCulture), onChange),
                 oldText = defaultVal.ToString(CultureInfo.InvariantCulture),
@@ -34,8 +34,8 @@ namespace Warpinator
                 max = max,
                 charLimit = charLimit,
             };
-            ToReturn.textInput.OnChange += _ => Numberify(ToReturn);
-            return ToReturn;
+            toReturn.textInput.OnChange += _ => Numberify(toReturn);
+            return toReturn;
         }
 
         // This method is used to process and validate the input in the NumberInput object.
