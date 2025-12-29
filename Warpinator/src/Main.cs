@@ -35,8 +35,7 @@ namespace Warpinator
         // Changelog for the current version.
         private readonly string[] changelog =
         {
-            "Added a keybind (RCTRL) for the teleport button. Defaults to the focused planet or rocket if nothing is selected.",
-            "Added a Focus Planet button to teleport menus."
+            "Fixed landmark teleportation breaking the mod in update 1.6."
         };
 
         // Fields.
