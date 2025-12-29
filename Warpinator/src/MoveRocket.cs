@@ -103,7 +103,7 @@ namespace Warpinator
             MsgDrawer.main.Log("Teleporting to " + planet.DisplayName + landmarkName);
             Double2 position = new Double2(
                 0,
-                planet.GetTerrainHeightAtAngle(angle + 90 * Mathf.Deg2Rad) + planet.Radius + PlayerController.main.player.Value.GetSizeRadius() / 2 + 3
+                planet.GetTerrainHeightAtAngle(angle + 90 * Mathf.Deg2Rad, true) + planet.Radius + PlayerController.main.player.Value.GetSizeRadius() / 2 + 3
                 ).Rotate(angle);
 
             var location = new Location(0, planet, position, new Double2(0, 0));
