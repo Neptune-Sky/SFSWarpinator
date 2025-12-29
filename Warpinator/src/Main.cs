@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ModLoader;
 using HarmonyLib;
+using ModLoader;
 using ModLoader.Helpers;
 using SFS.Input;
 using SFS.IO;
@@ -20,8 +20,8 @@ namespace Warpinator
         public override string ModNameID => "Warpinator";
         public override string DisplayName => "Warpinator";
         public override string Author => "NeptuneSky";
-        public override string MinimumGameVersionNecessary => "1.5.10.2";
-        public override string ModVersion => "v0.8.3-alpha";
+        public override string MinimumGameVersionNecessary => "1.6";
+        public override string ModVersion => "v0.8.4-alpha";
         public override string Description => "A teleporter for rockets.";
         public Dictionary<string, FilePath> UpdatableFiles => new()
         {
